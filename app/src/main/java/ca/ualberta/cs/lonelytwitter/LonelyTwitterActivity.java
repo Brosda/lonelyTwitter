@@ -39,8 +39,10 @@ public class LonelyTwitterActivity extends Activity {
 			public void onClick(View v) {
 				setResult(RESULT_OK);
 				String text = bodyText.getText().toString();
-				Tweet latestTweet = new Tweet(text);
-				ImportantTweets latestImportantTweet = new ImportantTweets(text);
+
+				Tweet latestTweet = new NormalTweet(text);
+				ImportantTweet latestImportantTweet = new ImportantTweet(text);
+				// latestTweet.setMessage(latestTweet.getMessage() + "!");
 				saveInFile(text, new Date(System.currentTimeMillis()));
 				finish();
 
