@@ -24,20 +24,20 @@ public class TweetList {
     }
 
 
-    public ArrayList getTweets() {
-        ArrayList<Tweet> nTweet = new ArrayList<Tweet>();
-        for (int i = 0; i < this.getCount(); i++) {
-            nTweet.add(this.getTweet(i));
-        }
-        for (int i = 1; i < nTweet.size(); i++) {
-            if (nTweet.get(i).getDate() < (nTweet.get(i-1).getDate())) {
-                Tweet bTweet = nTweet.get(i-1);
-                nTweet.remove(i-1);
-                nTweet.add(bTweet);
-            }
-        }
-            return
-    }
+   // public ArrayList getTweets() {
+      //  ArrayList<Tweet> nTweet = new ArrayList<Tweet>();
+       // for (int i = 0; i < this.getCount(); i++) {
+       //     nTweet.add(this.getTweet(i));
+      //  }
+        // for (int i = 1; i < nTweet.size(); i++) {
+        //if (nTweet.get(i).getDate() < (nTweet.get(i-1).getDate())) {
+        //   Tweet bTweet = nTweet.get(i-1);
+        //     nTweet.remove(i-1);
+        //     nTweet.add(bTweet);
+        // }
+        //  }
+        // return
+    //}
 
     public Tweet getTweet(int index){
         return tweets.get(index);
