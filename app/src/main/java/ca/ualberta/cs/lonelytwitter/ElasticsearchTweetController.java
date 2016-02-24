@@ -9,9 +9,12 @@ import com.searchly.jestdroid.JestDroidClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
+import io.searchbox.core.Search;
+import io.searchbox.core.SearchResult;
 
 /**
  * Created by esports on 2/17/16.
@@ -21,7 +24,30 @@ public class ElasticsearchTweetController {
 
     //TODO: A function that gets tweets
     public static class GetTweetsTask extends AsyncTask<String, Void, ArrayList<Tweet>> {
+        @Override
+        protected ArrayList<Tweet> doInBackground(String... search_strings){
+            verifyClient();
+            //start our initial array list (empty)
+            ArrayList<Tweet> tweets = new ArrayList<Tweet>();
 
+            Search search = new Search.Builder(search_strings[0]).addIndex("testing").addType("tweet").build();
+
+            try {
+                SearchResult execute = client.execute(search);
+                //TODO add an error message
+        //TODO Right here trigger if insert fails
+                if(execute.isSucceeded()) {
+                    //Return tweet list
+                    List<NormalTweet> returned_tweets = execute.getSourceAsObjectList(NormalTweet.class);
+                    tweets.addAll(returned_tweets);
+                } else {
+                    Log.i("TODO", "We don't know why but we get an error here");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
 
     }
 
@@ -50,7 +76,7 @@ public class ElasticsearchTweetController {
                     else {
                         //TODO add an error message
                         //TODO Right here trigger if insert fails
-                        Log.i("TODO", "We don't know why but we get an error here")
+                        Log.i("TODO", "We don't know why but we get an error here");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
