@@ -25,58 +25,62 @@ public class ElasticsearchTweetController {
     //TODO: A function that gets tweets
     public static class GetTweetsTask extends AsyncTask<String, Void, ArrayList<Tweet>> {
         @Override
-        protected ArrayList<Tweet> doInBackground(String... search_strings){
+        protected ArrayList<Tweet> doInBackground(String... search_strings) {
             verifyClient();
-            //start our initial array list (empty)
+
+            // Start our initial array list (empty)
             ArrayList<Tweet> tweets = new ArrayList<Tweet>();
 
-            Search search = new Search.Builder(search_strings[0]).addIndex("testing").addType("tweet").build();
+            // NOTE: I'm a making a huge assumption here, that only the first search term
+            // will be used.
+
+            Search search = new Search.Builder(search_strings[0])
+                    .addIndex("testing")
+                    .addType("tweet")
+                    .build();
 
             try {
                 SearchResult execute = client.execute(search);
-                //TODO add an error message
-        //TODO Right here trigger if insert fails
                 if(execute.isSucceeded()) {
-                    //Return tweet list
+                    // Return our list of tweets
                     List<NormalTweet> returned_tweets = execute.getSourceAsObjectList(NormalTweet.class);
                     tweets.addAll(returned_tweets);
                 } else {
-                    Log.i("TODO", "We don't know why but we get an error here");
+                    // TODO: Add an error message, because that other thing was puzzling.
+                    // TODO: Right here it will trigger if the search fails
+                    Log.i("TODO", "We actually failed here, searching for tweets");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return null;
+
+            return tweets;
         }
-
     }
+    //public static ArrayList<Tweet> getTweets() {
+    //    verifyClient();
+    //}
 
-    public static ArrayList<Tweet> getTweets() {
-       verifyClient();
-        return null;
-    }
     //TODO: A function that adds a tweet
-
-
     public static class AddTweetTask extends AsyncTask<NormalTweet, Void, Void> {
         @Override
         protected Void doInBackground(NormalTweet... tweets) {
             verifyClient();
 
-            //Since Async works on arrays we have to as well
-            for(int i = 0; i <tweets.length; i++) {
+            // Since AsyncTasks work on arrays, we need to work with arrays as well (>= 1 tweet)
+            for(int i = 0; i < tweets.length; i++) {
                 NormalTweet tweet = tweets[i];
 
                 Index index = new Index.Builder(tweet).index("testing").type("tweet").build();
                 try {
                     DocumentResult result = client.execute(index);
-                    if(result.isSucceeded()){
+                    if(result.isSucceeded()) {
+                        // Set the ID to tweet that elasticsearch told me it was
                         tweet.setId(result.getId());
-                    }
-                    else {
-                        //TODO add an error message
-                        //TODO Right here trigger if insert fails
-                        Log.i("TODO", "We don't know why but we get an error here");
+                    } else {
+                        // TODO: Add an error message, because this was puzzling.
+                        // TODO: Right here it will trigger if the insert fails
+                        Log.i("TODO", "We actually failed here, adding a tweet");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -85,11 +89,12 @@ public class ElasticsearchTweetController {
             return null;
         }
     }
+
     public static void verifyClient() {
-        //Verify the client exists
-        //if not make it
-        // TODO Put this url somewhere better http://cmput301.softwareprocess.es:8080
-        if(client == null){
+        // 1. Verify that 'client' exists.
+        if(client == null) {
+            // 2. If it doesn't, make it.
+            // TODO: Put this URL somewhere it makes sense (e.g. class variable?)
             DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080");
             DroidClientConfig config = builder.build();
 
@@ -97,6 +102,5 @@ public class ElasticsearchTweetController {
             factory.setDroidClientConfig(config);
             client = (JestDroidClient) factory.getObject();
         }
-
     }
 }
