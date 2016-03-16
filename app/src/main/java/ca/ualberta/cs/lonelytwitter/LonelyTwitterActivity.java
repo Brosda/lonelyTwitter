@@ -14,6 +14,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.concurrent.ExecutionException;
 
 public class LonelyTwitterActivity extends Activity {
@@ -64,7 +66,10 @@ public class LonelyTwitterActivity extends Activity {
                 String text = bodyText.getText().toString();
                 NormalTweet latestTweet = new NormalTweet(text);
 
-                tweets.add(latestTweet);
+                tweets.add(0,latestTweet);
+
+                // From http://stackoverflow.com/questions/26377961/how-to-sort-twitter-tweets-with-java-solved
+
 
                 latestTweet.addThumbnail(thumbnail);
 

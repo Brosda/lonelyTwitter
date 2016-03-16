@@ -44,13 +44,16 @@ public class ElasticsearchTweetController {
             //String search_string = "{\"sort\": { \"date\": { \"order\": \"desc\" }}}";
 
             /* NEW! */
-            String search_string;
-            if(params[0] == "") {
-                search_string = "{\"from\":0,\"size\":10000}";
-            } else {
+           // String search_string;
+
+            // The following orders the results by date
+            String search_string = "{\"sort\": { \"date\": { \"order\": \"desc\" }}}";
+            //if(params[0] == "") {
+            //    search_string = "{\"from\":0,\"size\":10000}";
+          //  } else {
                 // The following gets the top 10000 tweets matching the string passed in
-                search_string = "{\"from\":0,\"size\":10000,\"query\":{\"match\":{\"message\":\"" + params[0] + "\"}}}";
-            }
+          //      search_string = "{\"from\":0,\"size\":10000,\"query\":{\"match\":{\"message\":\"" + params[0] + "\"}}}";
+          //  }
 
             Search search = new Search.Builder(search_string).addIndex("testing").addType("tweet").build();
             try {

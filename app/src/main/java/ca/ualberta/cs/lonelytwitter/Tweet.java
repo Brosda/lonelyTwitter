@@ -11,7 +11,9 @@ import java.util.Date;
 
 import io.searchbox.annotations.JestId;
 
-public abstract class Tweet {
+public abstract class Tweet  {
+
+
     @JestId
     protected String id;
 
@@ -98,4 +100,5 @@ public abstract class Tweet {
         }
         return thumbnail;
     }
+
 }
